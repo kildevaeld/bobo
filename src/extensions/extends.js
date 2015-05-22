@@ -1,0 +1,5 @@
+
+
+Bobo.Base.registerExtension({
+
+});

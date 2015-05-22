@@ -1,0 +1,20 @@
+{
+  "name": "bobo",
+  "version": "0.0.1",
+  "private": true,
+  "authors": [
+    "Softshag & Me <admin@softshag.dk>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.3.4"
+  },
+  "main": "dist/bobo.js"
+}
