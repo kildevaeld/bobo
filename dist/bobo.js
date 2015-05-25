@@ -193,7 +193,19 @@
     });
   })();
 
-  Bobo.Base.registerExtension({});
+  Bobo.Base.registerExtension({
+    register: function register() {
+      if (this['extends']) {
+        this.__proto__ = get_extension(this['extends']);
+      }
+    }
+
+  });
+
+  function get_extension(extend) {
+    var proto = Object.getPrototypeOf(Document.createElement(extend));
+    return this.extend(Object.create(proto), Bobo.Base);
+  }
 
   // Is/name extension
   Bobo.Base.registerExtension({
@@ -207,95 +219,6 @@
     }
   });
 
-  function get_match(child, store) {
-    for (var k in store) {
-      if (child.matches(k)) {
-        return store[k];
-      }
-      return store.content;
-    }
-  }
-
-  var API = {
-    render: function render() {
-      if (this._template) {
-        var template = document.importNode(this._template.content, true),
-            store = this.__store,
-            injections = __slice.call(template.querySelectorAll('content'));
-
-        var matches = this._getmatches(injections);
-        var content = this._getcontent(injections);
-
-        var _loop = function (k) {
-          var frag = document.createDocumentFragment();
-
-          store[k].forEach(function (child) {
-            frag.appendChild(child);
-          });
-
-          var sub = k === 'content' ? content : matches[k];
-
-          if (sub && sub.parentNode) {
-            sub.parentNode.replaceChild(frag, sub);
-          } else {
-            template.appendChild(frag);
-
-            if (sub) {
-              template.removeChild(sub);
-            }
-          }
-        };
-
-        for (var k in store) {
-          _loop(k);
-        }
-
-        this.root.innerHTML = '';
-        Bobo.Base.constructor.prototype.appendChild.call(this, template);
-      }
-    },
-    _getmatches: function _getmatches(injections) {
-
-      var matches = {};
-      injections.forEach(function (elm) {
-        if (elm.getAttribute('select')) {
-          matches[elm.getAttribute('select')] = elm;
-        }
-      });
-      return matches;
-    },
-
-    _getcontent: function _getcontent(injections) {
-      var contents = injections.filter(function (elm) {
-        return !!!elm.getAttribute('select');
-      });
-
-      if (contents.length) return contents[0];
-      return null;
-    },
-    appendChild: function appendChild(child) {
-      for (var k in this.__store) {
-        if (child.matches(k)) {
-          var c = this.__store[k];
-          c.push(child);
-          if (c.length === 1) {
-            return this.render();
-          } else {
-            var elm = c[c.length - 2];
-            return elm.parentNode.appendChild(child);
-          }
-        }
-      }
-      // TODO: Only rerender if it's the first.
-      this.__store.content.push(child);
-      this.render();
-    },
-
-    removeChild: function removeChild(child) {
-      for (var k in this.__store) {}
-    }
-  };
-
   // Template
   Bobo.Base.registerExtension({
     register: function register() {
@@ -306,52 +229,17 @@
         if (template) {
           this._template = template;
         }
-        if (!this.useShadow) {
-          utils.extend(this, API);
-        }
       }
     },
 
     created: function created() {
-      var _this = this;
-
       if (this._template) {
 
-        if (this.useShadow === true) {
-          var template = document.importNode(this._template.content, true);
-          this.root = this.createShadowRoot();
-          this.root.appendChild(template);
-        } else {
-          (function () {
-
-            var injections = __slice.call(_this._template.content.querySelectorAll('content'));
-
-            var matches = _this._getmatches(injections);
-            var content = _this._getcontent(injections);
-
-            var children = __slice.call(_this.children);
-
-            var store = {};
-            __slice.call(_this.children).forEach(function (child) {
-              for (var k in matches) {
-                if (child.matches(k)) {
-                  if (store[k] == null) store[k] = [];
-                  store[k].push(child);
-                  children.splice(children.indexOf(child), 1);
-                }
-              }
-            });
-            if (content) store.content = children;
-
-            _this.__store = store;
-
-            _this.render();
-          })();
-        }
+        var template = document.importNode(this._template.content, true);
+        this.root = this.createShadowRoot();
+        this.root.appendChild(template);
       }
     }
-  }, {
-    useShadow: true
   });
 
   Bobo.Base.registerExtension({
@@ -365,18 +253,32 @@
   Bobo.Base.registerExtension({
 
     created: function created() {
-      var _this2 = this;
+      var _this = this;
 
       var names = __slice.call(this.root.querySelectorAll('[name]'));
 
       names.forEach(function (n) {
-        _this2.ui[n.getAttribute('name')] = n;
+        _this.ui[n.getAttribute('name')] = n;
       });
     }
 
   }, {
     ui: {}
   });
+
+  Bobo.Base.registerExtension({
+    register: function register() {
+      if (this['extends']) {
+        this.__proto__ = get_extension(this['extends']);
+      }
+    }
+
+  });
+
+  function get_extension(extend) {
+    var proto = Object.getPrototypeOf(Document.createElement(extend));
+    return this.extend(Object.create(proto), Bobo.Base);
+  }
   return Bobo;
 
 }));

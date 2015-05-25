@@ -1,7 +1,7 @@
 
 
 Bobo.Base = (function () {
-  var Extenstions = []
+  var Extenstions = [];
   var Base = {
     registerExtension (ext, proto) {
       Extenstions.push(ext);
@@ -47,7 +47,7 @@ Bobo.Base = (function () {
   };
 
   //utils.extend(Base, EventEmitter);
-  Base = utils.chainObject(Base, HTMLElement.prototype);
+  Base = utils.inherits(Base, HTMLElement.prototype);
 
   Object.defineProperty(Base, 'isBobo', {value:true});
 

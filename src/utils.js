@@ -22,11 +22,12 @@ const utils = {
       });
     }
 
+
    return prototype;
 
   },
 
-  chainObject (object, inherited) {
+  inherits (object, inherited) {
     if (object  !== inherited) {
       return utils.extend(Object.create(inherited), object);
     }
@@ -38,8 +39,6 @@ const utils = {
     let e = __camelCase('on-' + event.replace(/:/g, '-')),
       m = utils.getOption.call(this, e),
       args = __slice.call(arguments, 1);
-
-    //utils.callFunction(this.emit, this, __slice.call(arguments));
 
     if (typeof m === 'function') {
       utils.callFunction(m, this, args);

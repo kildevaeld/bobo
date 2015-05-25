@@ -16,7 +16,8 @@ exports.extensions = [
   'is.js',
   'template.js',
   'properties.js',
-  'annotation.js'
-]
+  'annotation.js',
+  'extends.js'
+];
 
 exports.destPath = './dist';

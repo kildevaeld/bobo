@@ -10,7 +10,7 @@ Bobo.Module = (function () {
     }
   };
 
-  BoboModule = utils.chainObject(BoboModule, Bobo.Base);
+  BoboModule = utils.inherits(BoboModule, Bobo.Base);
 
   return document.registerElement('bobo-element', {
     prototype: BoboModule

@@ -1,6 +1,6 @@
 
 function create (prototype) {
-  prototype = utils.extend(Object.create(Bobo.Base), prototype);
+  prototype = utils.inherits(prototype, Bobo.Base);
   prototype.registerCallback();
   return prototype;
 }
