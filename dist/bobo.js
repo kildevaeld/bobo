@@ -33,7 +33,7 @@
       return prototype;
     },
 
-    chainObject: function chainObject(object, inherited) {
+    inherits: function inherits(object, inherited) {
       if (object !== inherited) {
         return utils.extend(Object.create(inherited), object);
       }
@@ -46,7 +46,6 @@
           m = utils.getOption.call(this, e),
           args = __slice.call(arguments, 1);
 
-      //utils.callFunction(this.emit, this, __slice.call(arguments));
       if (typeof m === 'function') {
         utils.callFunction(m, this, args);
       }
@@ -87,7 +86,7 @@
   };
 
   function create(prototype) {
-    prototype = utils.extend(Object.create(Bobo.Base), prototype);
+    prototype = utils.inherits(prototype, Bobo.Base);
     prototype.registerCallback();
     return prototype;
   }
@@ -167,7 +166,7 @@
     };
 
     //utils.extend(Base, EventEmitter);
-    Base = utils.chainObject(Base, HTMLElement.prototype);
+    Base = utils.inherits(Base, HTMLElement.prototype);
 
     Object.defineProperty(Base, 'isBobo', {
       value: true
@@ -186,7 +185,7 @@
       }
     };
 
-    BoboModule = utils.chainObject(BoboModule, Bobo.Base);
+    BoboModule = utils.inherits(BoboModule, Bobo.Base);
 
     return document.registerElement('bobo-element', {
       prototype: BoboModule
@@ -203,8 +202,8 @@
   });
 
   function get_extension(extend) {
-    var proto = Object.getPrototypeOf(Document.createElement(extend));
-    return this.extend(Object.create(proto), Bobo.Base);
+    var proto = Object.getPrototypeOf(document.createElement(extend));
+    return utils.extend(Object.create(proto), Bobo.Base);
   }
 
   // Is/name extension
@@ -276,8 +275,8 @@
   });
 
   function get_extension(extend) {
-    var proto = Object.getPrototypeOf(Document.createElement(extend));
-    return this.extend(Object.create(proto), Bobo.Base);
+    var proto = Object.getPrototypeOf(document.createElement(extend));
+    return utils.extend(Object.create(proto), Bobo.Base);
   }
   return Bobo;
 
