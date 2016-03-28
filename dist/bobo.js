@@ -1,3 +1,6 @@
+/*!
+ * Bobo.js: 300 lines of convenience
+ */
 (function (root, factory) {
   if (typeof define === 'function' && define.amd) {
     define(factory);

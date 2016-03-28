@@ -20,3 +20,4 @@ const Bobo = function (prototype) {
 
   return prototype.constructor;
 };
+
